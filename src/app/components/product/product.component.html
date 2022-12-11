@@ -1,18 +1,24 @@
-<table class="table">
+<div *ngIf = "dataLoaded == false" class="spinner-border" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<table *ngIf = "dataLoaded == true" class="table">
     <thead>
       <tr>
         <th scope="col">Product Id</th>
-        <th scope="col">Product Name</th>
         <th scope="col">Category Id</th>
+        <th scope="col">Product Name</th>       
         <th scope="col">Unit Price</th>
+        <th scope="col">Stock</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor = "let product of products">
         <td>{{product.productId}}</td>
-        <td>{{product.productName}}</td>
         <td>{{product.categoryId}}</td>
+        <td>{{product.productName}}</td>     
         <td>{{product.unitPrice}}</td>
+        <td>{{product.unitsInStock}}</td>
       </tr>
     </tbody>
   </table>
