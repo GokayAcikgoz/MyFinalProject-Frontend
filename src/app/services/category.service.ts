@@ -2,7 +2,7 @@ import { Category } from './../models/category';
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';  //apiye bağlanmak için
 import { Observable } from 'rxjs/internal/Observable';
-import { ListResponseModel } from '../models/ListResponseModel';
+import { ListResponseModel } from '../models/listResponseModel';
 
 @Injectable({
   providedIn: 'root'
