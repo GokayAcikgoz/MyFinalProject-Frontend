@@ -2,23 +2,36 @@
   <span class="visually-hidden">Loading...</span>
 </div>
 
+<div class="mb-3">
+  <label for="filterText" class="form-label">Ürün Ara</label>
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="Arama ifadesi giriniz">
+</div>
+
+<div *ngIf="filterText.length > 2" class="alert alert-success"> <!-- ngIf = filter filter text var ise gözük-->
+  {{filterText}} aradınız
+</div>
+
 <table *ngIf = "dataLoaded == true" class="table">
     <thead>
       <tr>
-        <th scope="col">Product Id</th>
-        <th scope="col">Category Id</th>
-        <th scope="col">Product Name</th>       
-        <th scope="col">Unit Price</th>
-        <th scope="col">Stock</th>
+        <th scope="col">Id</th>
+        <th scope="col">Kategori</th>
+        <th scope="col">Ürün Adi</th>       
+        <th scope="col">Fiyat</th>
+        <th scope="col">Kdv'li Fiyat</th>
+        <th scope="col">Stok</th>      
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor = "let product of products">
+      <tr *ngFor = "let product of products | filterPipe:filterText">
         <td>{{product.productId}}</td>
         <td>{{product.categoryId}}</td>
-        <td>{{product.productName}}</td>     
-        <td>{{product.unitPrice}}</td>
+        <td>{{product.productName |uppercase}}</td>     
+        <td>{{product.unitPrice |currency}}</td>
+        <td>{{product.unitPrice |vatAdded:18 |currency}}</td>
         <td>{{product.unitsInStock}}</td>
+        <td><button (click)="addToCart(product)" class="btn btn-success">Sepete ekle</button></td> <!-- click butona tıklanırsa componentteki addTocCart fonksiyonunu çalıştır-->
       </tr>
     </tbody>
   </table>

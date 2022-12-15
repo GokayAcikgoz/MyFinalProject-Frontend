@@ -1,7 +1,10 @@
+import { CartService } from './../../services/cart.service';
 import { ProductService } from './../../services/product.service';
 import { Product } from './../../models/product';
 import { Component, OnInit } from '@angular/core';
-import { ProductResponseModel } from 'src/app/models/productResponseModel';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 @Component({
@@ -14,11 +17,25 @@ export class ProductComponent implements OnInit{
 
   products : Product[] = [];
   dataLoaded = false;
+  filterText = "";
 
- constructor(private productService : ProductService){} //bir servisi kullanmak için
+ constructor(
+  private productService : ProductService, 
+  private activatedRoute:ActivatedRoute, 
+  private toastrService: ToastrService,
+  private cartService: CartService,
+  ){} //bir servisi kullanmak için. activatedRoute -> aktifleştirilmiş root.
+ //category bastığım zaman productları id göre gelmesi için.
 
  ngOnInit(): void {
-  this.getProducts()
+  this.activatedRoute.params.subscribe(params => {
+    if(params["categoryId"]){
+      this.getProductsByCategory(params["categoryId"])
+    }else{
+      this.getProducts()
+    }
+  })
+  
 }
 
  //api mize bağlanmak için
@@ -28,4 +45,18 @@ export class ProductComponent implements OnInit{
     this.dataLoaded = true;
   })
  }
+
+ getProductsByCategory(categoryId:number){
+  this.productService.getProductsByCategory(categoryId).subscribe(response => {
+    this.products = response.data
+    this.dataLoaded = true;
+  })
+ }
+
+
+ addToCart(product:Product){
+  this.cartService.addToCart(product);
+ this.toastrService.success("Sepete Eklendi", product.productName);
+ }
+
 }
